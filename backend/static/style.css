@@ -121,3 +121,32 @@ h2 {
     cursor: pointer;
     color: #aaa; /* Change color as needed */
 }
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    width: calc(100% - 30px); /* Adjust width for the icon */
+}
+
+.password-wrapper i {
+    position: absolute;
+    right: 10px; /* Position the icon */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.success {
+    color: green;
+}
+
+.error {
+    color: red;
+}
