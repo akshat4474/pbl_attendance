@@ -2,10 +2,13 @@
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form'); // Register form
 const usernameInput = document.getElementById('username');
-const passwordInput = document.getElementById('password');
 const errorMessage = document.getElementById('error-message');
+const messageElement = document.getElementById('message');
 const togglePassword = document.getElementById('toggle-password');
 const registerUsernameInput = document.getElementById('register-username');
+const registerTogglePassword = document.getElementById('register-toggle-password');
+const loginTogglePassword = document.getElementById('login-toggle-password');
+const loginPasswordInput = document.getElementById('password');
 const registerPasswordInput = document.getElementById('register-password');
 
 
@@ -15,7 +18,7 @@ if (loginForm) {
         e.preventDefault();  // Prevent form submission
 
         const username = usernameInput.value.trim();
-        const password = passwordInput.value.trim();
+        const password = loginPasswordInput.value.trim(); // Use loginPasswordInput instead of passwordInput
 
         if (!validateInput(username, password)) {
             displayError('Please fill in both fields.');
@@ -63,13 +66,16 @@ if (registerForm) {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
                 if (response.message === 'Registration successful!') {
-                    displayError(response.message);  // Display success message
+                    displaySuccessMessage(response.message);  // Display success message
                     setTimeout(() => {
-                        window.location.href = "dashboard.html"; // Redirect to dashboard on success
+                        window.location.href = "/"; // Redirect to login page on success
                     }, 2000); // Redirect after 2 seconds for user to see the message
                 } else {
                     displayError(response.message); // Show error message
                 }
+            } else if (xhr.status === 400) {
+                const response = JSON.parse(xhr.responseText);
+                displayError(response.message); // Show error message
             } else {
                 displayError('An error occurred. Please try again.'); // Handle error response
             }
@@ -77,6 +83,22 @@ if (registerForm) {
 
         xhr.send(`username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
     });
+}
+
+// Function to display success message
+function displaySuccessMessage(message) {
+    const successMessageElement = document.getElementById('success-message');
+    if (successMessageElement) {
+        successMessageElement.textContent = message;
+    }
+}
+
+// Function to display error message
+function displayError(message) {
+    const errorMessageElement = document.getElementById('error-message');
+    if (errorMessageElement) {
+        errorMessageElement.textContent = message;
+    }
 }
 
 // Common validation function
@@ -88,15 +110,27 @@ function displayError(message) {
     errorMessage.textContent = message;
 }
 
+
+
 // Password visibility toggle functionality
-if (togglePassword) { // Ensure togglePassword is defined
-    togglePassword.addEventListener('click', function() {
+function togglePasswordVisibility(toggleButton, passwordInput) {
+    toggleButton.addEventListener('click', function() {
         // Toggle the password field type
-        const type = registerPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        registerPasswordInput.setAttribute('type', type);
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
 
         // Toggle the eye icon
         this.classList.toggle('fa-eye');
         this.classList.toggle('fa-eye-slash');
     });
+}
+
+
+
+if (loginTogglePassword && loginPasswordInput) {
+    togglePasswordVisibility(loginTogglePassword, loginPasswordInput);
+}
+
+if (registerTogglePassword && registerPasswordInput) {
+    togglePasswordVisibility(registerTogglePassword, registerPasswordInput);
 }

@@ -147,6 +147,14 @@ ul {
     color: green;
 }
 
-.error {
+.error-message {
     color: red;
+}
+
+.success-message {
+    color: green;
+}
+
+#success-message {
+    color: green;
 }

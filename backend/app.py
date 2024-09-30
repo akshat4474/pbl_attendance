@@ -1,8 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify,flash
 import sqlite3
 import bcrypt
 import os
-import flash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Change this in production
@@ -23,7 +22,7 @@ def init_db():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -40,13 +39,14 @@ def register():
                 conn.commit()
                 
                 # Return a JSON response
-                return jsonify({'message': 'Registration successful!'})
+                return jsonify({'message': 'Registration successful! Please login'})
                 
             except sqlite3.IntegrityError:
                 # Handle the UNIQUE constraint error
                 return jsonify({'message': 'Username already exists. Please choose another one.'}), 400
             
     return render_template('register.html')
+
 @app.route('/login', methods=['POST'])
 def login():
     username = request.form['username']
@@ -59,12 +59,12 @@ def login():
         cursor.execute('SELECT password FROM users WHERE username = ?', (username,))
         user = cursor.fetchone()
 
-        if user and bcrypt.checkpw(password.encode('utf-8'), user[0].encode('utf-8')):
+        if user and bcrypt.checkpw(password.encode('utf-8'), user[0]):
             flash('Login successful!', 'success')
             return 'success'  # Return success for AJAX request
         else:
             return 'Invalid username or password.'  # Return error message
-
+        
 @app.route('/dashboard')
 def dashboard():
     return "Welcome to the dashboard!"  # Replace with actual dashboard HTML
