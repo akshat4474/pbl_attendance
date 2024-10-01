@@ -65,10 +65,10 @@ if (registerForm) {
         xhr.onload = function() {
             if (xhr.status === 200) {
                 const response = JSON.parse(xhr.responseText);
-                if (response.message === 'Registration successful!') {
+                if (response.message === "Registration successful! Please login") {
                     displaySuccessMessage(response.message);  // Display success message
                     setTimeout(() => {
-                        window.location.href = "/"; // Redirect to login page on success
+                        window.location.href = " / "; // Redirect to login page on success
                     }, 2000); // Redirect after 2 seconds for user to see the message
                 } else {
                     displayError(response.message); // Show error message

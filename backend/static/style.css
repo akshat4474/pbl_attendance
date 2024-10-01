@@ -84,8 +84,16 @@ h2 {
 }
 
 /* Error message */
-#error-message {
+.error-message {
     color: #FF5252;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Success message */
+.success-message {
+    color: green !important;
     font-size: 14px;
     text-align: center;
     margin-top: 10px;
@@ -143,18 +151,3 @@ ul {
     padding: 0;
 }
 
-.success {
-    color: green;
-}
-
-.error-message {
-    color: red;
-}
-
-.success-message {
-    color: green;
-}
-
-#success-message {
-    color: green;
-}
