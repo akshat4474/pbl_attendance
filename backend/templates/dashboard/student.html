@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard/dash_style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Student Dashboard</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" onclick="showSection('profile')">Profile</a></li>
+                <li><a href="#" onclick="showSection('attendance')">Attendance</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Profile Section -->
+            <section id="profile" class="content-section">
+                <h2>Profile</h2>
+                <p>Name: Student Name</p>
+                <p>Username: studentuser</p>
+            </section>
+
+            <!-- Attendance Section -->
+            <section id="attendance" class="content-section" style="display: none;">
+                <h2>Attendance</h2>
+                <p>Attendance Percentage: 85%</p>
+                <form id="attendance-form">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date">
+                    
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" rows="4"></textarea>
+
+                    <button type="submit">Submit Request</button>
+                </form>
+            </section>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
