@@ -12,8 +12,8 @@ body {
     overflow: hidden; /* Hide any overflow from animations */
 }
 
-/* Centering the login box */
-.login-container {
+/* Centering the login and register box */
+.login-container, .register-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,7 +22,7 @@ body {
 }
 
 /* Adding futuristic glowing effect to the box */
-.login-box {
+.login-box, .register-box {
     background: rgba(255, 255, 255, 0.1); /* Semi-transparent for glassmorphism effect */
     backdrop-filter: blur(10px); /* Background blur */
     padding: 40px;
@@ -53,7 +53,7 @@ h2 {
     color: #b8c6db; /* Light futuristic text color */
 }
 
-.input-group input {
+.input-group input, .input-group select {
     width: 100%;
     padding: 12px;
     background: transparent;
@@ -65,13 +65,29 @@ h2 {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.input-group input:focus {
+.input-group input:focus, .input-group select:focus {
     border-color: #4CAF50;
     box-shadow: 0 0 8px 2px rgba(76, 175, 80, 0.5); /* Neon green glow on focus */
 }
 
-/* Styling the futuristic login button */
-.login-btn {
+/* Styling the select dropdown (Role selection) */
+.input-group select {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background for the dropdown */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 30px;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.5 3.5L8 10l6.5-6.5L14 2.5 8 8.5l-6-6-1 1z"/></svg>'); /* Down arrow for select */
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+}
+
+.input-group select option {
+    color: #000; /* Make options black for visibility in the dropdown */
+}
+
+/* Styling the futuristic button (used in login and register) */
+.login-btn, .register-btn {
     width: 100%;
     padding: 12px;
     background: linear-gradient(135deg, #4CAF50, #8BC34A); /* Neon gradient button */
@@ -81,6 +97,11 @@ h2 {
     font-size: 16px;
     cursor: pointer;
     box-shadow: 0 8px 15px rgba(76, 175, 80, 0.4); /* Button glow */
+}
+
+.login-btn:hover, .register-btn:hover {
+    background-color: #66BB6A; /* Lighter green on hover */
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.6); /* Stronger glow */
 }
 
 /* Error message */
@@ -100,19 +121,19 @@ h2 {
 }
 
 /* Register link with futuristic styling */
-.register-link {
+.register-link, .login-link {
     text-align: center;
     margin-top: 20px;
     color: #b8c6db; /* Light text color */
 }
 
-.register-link a {
+.register-link a, .login-link a {
     color: #81C784; /* Futuristic green color */
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.register-link a:hover {
+.register-link a:hover, .login-link a:hover {
     color: #66BB6A; /* Lighter green on hover */
     text-decoration: underline;
 }
@@ -150,4 +171,3 @@ ul {
     list-style-type: none;
     padding: 0;
 }
-

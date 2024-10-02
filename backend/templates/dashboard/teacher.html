@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard/dash_style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Teacher Dashboard</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" onclick="showSection('profile')">Profile</a></li>
+                <li><a href="#" onclick="showSection('student-requests')">Student Requests</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Profile Section -->
+            <section id="profile" class="content-section">
+                <h2>Profile</h2>
+                <p>Name: Teacher Name</p>
+                <p>Username: teacheruser</p>
+            </section>
+
+            <!-- Student Requests Section -->
+            <section id="student-requests" class="content-section" style="display: none;">
+                <h2>Student Requests</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Request Date</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>2024-10-01</td>
+                            <td>Need approval for absence on 2024-09-28</td>
+                            <td>Pending</td>
+                            <td><button>Approve</button> <button>Deny</button></td>
+                        </tr>
+                        <!-- More student requests -->
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

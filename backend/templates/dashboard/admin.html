@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard/dash_style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> <!-- Icon Library -->
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Dashboard</h2>
+                <!-- Collapsible button -->
+                <button id="collapse-btn"><i class="fas fa-bars"></i></button>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <ul class="sidebar-menu">
+                <li><a href="#" onclick="showSection('profile')"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#" onclick="showSection('role-management')"><i class="fas fa-users-cog"></i> Role Management</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li> <!-- Logout link -->
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Profile Section (shown by default) -->
+            <section id="profile" class="content-section">
+                <h2>Profile</h2>
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <!-- Profile Image -->
+                    <div class="profile-img">
+                        <!-- Use the Flask route '/images/none_profile.png' to serve the image -->
+                        <img src="/images/none_profile.png" alt="Profile Picture" />
+                    </div>
+
+                    <!-- Profile Info -->
+                    <div class="profile-info">
+                        <h3>{{ session['username'] }}</h3> <!-- Display the logged-in user's name -->
+                        <p>Username: <strong>{{ session['username'] }}</strong></p>
+                        <p>Email: <strong>admin@example.com</strong></p> <!-- Can be updated dynamically -->
+                        <p>Role: <strong>Administrator</strong></p> <!-- Admin role shown here -->
+                    </div>
+                </div>
+
+                <!-- Editable Profile Form -->
+                <form id="edit-profile-form" class="profile-form">
+                    <div class="input-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" value="{{ session['username'] }}">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" value="admin@example.com">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" placeholder="Enter new password">
+                    </div>
+
+                    <div class="input-group">
+                        <button type="submit" class="save-btn">Save Changes</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Role Management Section -->
+            <section id="role-management" class="content-section" style="display: none;">
+                <h2>Role Management</h2>
+            
+                <!-- Scrollable Table Container -->
+                <div class="scrollable-table">
+                    <table id="users-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Current Role</th>
+                                <th>New Role</th>
+                                <th>Assign Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows will be populated dynamically using JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>            
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
