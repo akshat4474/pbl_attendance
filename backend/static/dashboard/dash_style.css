@@ -197,10 +197,11 @@ td {
 }
 
 /* Role Management Scrollable Table */
-#role-management {
-    max-height: 500px; /* Set a max height to limit the height of the content */
+.scrollable-table {
+    max-height: 400px; /* Set a max height to limit the height of the content */
     overflow-y: auto;  /* Enable vertical scrolling */
     scroll-behavior: smooth;  /* Smooth scrolling */
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* Table Scroll Styles */
@@ -246,17 +247,17 @@ td {
 }
 
 /* Scrollbar Styling */
-#role-management::-webkit-scrollbar {
+.scrollable-table::-webkit-scrollbar {
     width: 10px;
 }
 
-#role-management::-webkit-scrollbar-thumb {
-    background-color: #4CAF50; /* Custom scrollbar color */
+.scrollable-table::-webkit-scrollbar-thumb {
+    background-color: #4CAF50;
     border-radius: 10px;
 }
 
-#role-management::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1); /* Light track color */
+.scrollable-table::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 /* Table button styles */
@@ -273,6 +274,20 @@ table button {
 table button:hover {
     background-color: #66BB6A; /* Lighter green on hover */
     box-shadow: 0 0 8px rgba(76, 175, 80, 0.4); /* Glow effect */
+}
+
+/* Scrollbar Styling */
+.scrollable-table::-webkit-scrollbar {
+    width: 10px;
+}
+
+.scrollable-table::-webkit-scrollbar-thumb {
+    background-color: #4CAF50;
+    border-radius: 10px;
+}
+
+.scrollable-table::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 
