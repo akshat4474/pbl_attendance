@@ -4,18 +4,26 @@ import bcrypt
 import os
 from dotenv import load_dotenv  # For loading the passkey from .env
 
+base_dir = os.getcwd()  # Get the current working directory
+template_dir = os.path.join(base_dir, 'frontend', 'templates')
+static_dir = os.path.join(base_dir, 'frontend', 'static')
 # Initialize the Flask app
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Change this in production
+app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+
+app.secret_key = os.urandom(24) #Random secret key for session management
+
 
 # Specify the full path to your pass.env file
-env_path = os.path.join('E:\\PBL Attendance\\backend\\pass.env')
+env_path = os.path.join(base_dir, 'backend', 'pass.env')
 
 # Load the pass.env file from the explicit path
 load_dotenv(env_path)
 
-# Fetch the ADMIN_PASSKEY
+# Fetch admin credentials from the .env file
+ADMIN_NAME = os.getenv('ADMIN_NAME', 'admin')
+ADMIN_PASS = os.getenv('ADMIN_PASS', 'adminpass')
 ADMIN_PASSKEY = os.getenv('ADMIN_PASSKEY', 'supersecretkey')
+
 
 def init_db():
     db_folder = os.path.join('backend', 'database')
@@ -33,18 +41,6 @@ def init_db():
             )
         ''')
         conn.commit()
-
-        # Check if the default admin exists, if not create it
-        cursor = conn.cursor()
-        cursor.execute('SELECT username FROM users WHERE username = "admin"')
-        admin_exists = cursor.fetchone()
-
-        if not admin_exists:
-            # Insert the default admin with a hashed password and admin role
-            hashed_password = bcrypt.hashpw("adminpass".encode('utf-8'), bcrypt.gensalt())  # Default password: adminpass
-            conn.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', 
-                         ("admin", hashed_password, "admin"))
-            conn.commit()
 
 @app.route('/')
 def index():
@@ -96,6 +92,20 @@ def login():
     username = request.form['username']
     password = request.form['password']
 
+    # Check if the username is the admin
+    if username == ADMIN_NAME:
+        # Validate the password for admin user
+        if password == ADMIN_PASS:
+            session['username'] = username
+            session['role'] = 'admin'
+            session['passkey_validated'] = False  # Admin must validate passkey
+            session.modified = True
+            return jsonify({'message': 'passkey_required'})  # Redirect to passkey validation page
+        else:
+            flash('Invalid admin credentials', 'error')
+            return jsonify({'message': 'error'})  # Return error for wrong admin credentials
+
+    # For non-admin users, query the database
     db_path = os.path.join('backend', 'database', 'users.db')
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
@@ -105,20 +115,11 @@ def login():
         if user and bcrypt.checkpw(password.encode('utf-8'), user[0]):
             session['username'] = username
             session['role'] = user[1]
-
-            # Ensure that session is flagged as modified
             session.modified = True
-
-            # If the user is admin, redirect to passkey validation page and reset passkey validation session
-            if user[1] == 'admin':
-                session['passkey_validated'] = False  # Reset passkey validation
-                session.modified = True  # Ensure session gets updated
-                return jsonify({'message': 'passkey_required'})  # Return a response to JS to redirect
-            else:
-                return jsonify({'message': 'success'})  # Redirect for non-admin users
+            return jsonify({'message': 'success'})  # Successful login
         else:
             flash('Invalid username or password', 'error')
-            return jsonify({'message': 'error'})  # Return error message as JSON
+            return jsonify({'message': 'error'})  # Return error message
 
 @app.route('/passkey', methods=['GET', 'POST'])
 def passkey_validation():
@@ -129,8 +130,7 @@ def passkey_validation():
         if passkey == ADMIN_PASSKEY:
             session['passkey_validated'] = True  # Set passkey validation to True
             session.modified = True  # Ensure session is updated
-            # Redirect to the admin dashboard directly from the server
-            return redirect(url_for('admin_dashboard'))
+            return redirect(url_for('admin_dashboard'))  # Redirect to admin dashboard
         else:
             flash('Invalid passkey!', 'error')
             return redirect(url_for('passkey_validation'))  # Reload the passkey page on failure
@@ -139,19 +139,13 @@ def passkey_validation():
 
 @app.route('/admin_dashboard')
 def admin_dashboard():
-    print(session)  # Print the session to debug
-    # Ensure the user is logged in as admin and has completed passkey validation
     if 'username' not in session or session.get('role') != 'admin':
-        print("User is not logged in as admin")
         return redirect(url_for('index'))
     
-    # Check if the admin has validated the passkey
     if not session.get('passkey_validated'):
         flash('You need to validate the passkey first.', 'error')
-        print("Passkey not validated yet")
         return redirect(url_for('passkey_validation'))
 
-    print("Admin dashboard accessed")
     return render_template('dashboard/admin.html')
 
 
@@ -169,7 +163,11 @@ def assign_role():
     username = request.form['username']
     new_role = request.form['role']
 
-    # Use the same db_path for the connection
+    # Prevent the admin from changing their own role
+    if username == ADMIN_NAME:
+        flash('You cannot change the admin role.', 'error')
+        return redirect(url_for('admin_dashboard'))
+
     db_path = os.path.join('backend', 'database', 'users.db')
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
@@ -192,15 +190,12 @@ def get_users_pending_role():
 
 @app.route('/get_users')
 def get_users():
-    # Use the same db_path for the connection
     db_path = os.path.join('backend', 'database', 'users.db')
     with sqlite3.connect(db_path) as conn:
         cursor = conn.cursor()
-        # Fetch all users and their current roles
         cursor.execute('SELECT username, role FROM users')
         users = cursor.fetchall()  # Fetch all users with their current roles
-    return jsonify(users)  # Return users as JSON response
-
+    return jsonify(users)
 
 if __name__ == '__main__':
     init_db()  # Initialize the database

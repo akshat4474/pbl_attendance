@@ -172,8 +172,9 @@ button:hover {
 /* Table styles */
 table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+    border-collapse: collapse; /* Ensures no space between borders */
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 table, th, td {
@@ -181,14 +182,18 @@ table, th, td {
 }
 
 th, td {
-    padding: 12px;
+    padding: 8px;
     color: #fff;
     text-align: left;
-    font-size: 16px;
+    font-size: 16px; /* Increase font size slightly to improve readability */
+    line-height: 1.5;
+    vertical-align: middle; /* Ensure vertical centering */
 }
 
 th {
     background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent for glass effect */
+    padding-top: 0;
+    padding-bottom: 0;
     color: #fff;
 }
 
@@ -196,24 +201,17 @@ td {
     background-color: rgba(255, 255, 255, 0.05); /* Light glassmorphism background */
 }
 
-/* Role Management Scrollable Table */
-.scrollable-table {
-    max-height: 400px; /* Set a max height to limit the height of the content */
-    overflow-y: auto;  /* Enable vertical scrolling */
-    scroll-behavior: smooth;  /* Smooth scrolling */
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-/* Table Scroll Styles */
+/* Scrollable Table Fix for Sticky Header */
 #users-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Ensure the table layout is fixed for consistent column sizes */
+    table-layout: auto; /* Set to auto to allow dynamic column widths */
+    margin: 0;
 }
 
 #users-table thead {
     position: sticky;
-    top: 0; /* Sticky header */
+    top: 0;
     background-color: rgba(255, 255, 255, 0.1); /* Maintain glass effect for the header */
     z-index: 1;
 }
@@ -221,17 +219,18 @@ td {
 #users-table tbody {
     display: block;
     max-height: 400px; /* Max height for scrollable content */
-    overflow-y: auto; /* Enable scrolling on the table body */
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
 }
 
 #users-table thead, #users-table tbody tr {
     display: table;
     width: 100%;
-    table-layout: fixed; /* Ensure proper column width alignment */
 }
 
 #users-table th, #users-table td {
-    padding: 12px;
+    padding: 8px;
     text-align: left;
     color: #fff;
     font-size: 16px;
@@ -239,25 +238,35 @@ td {
     white-space: nowrap; /* Prevent text wrapping in the cells */
 }
 
-#users-table th {
-    background-color: rgba(255, 255, 255, 0.1); /* Light glass effect for the header */
-    position: sticky;
-    top: 0;
-    z-index: 2;
+/* Adjust column width by specifying for individual columns */
+#users-table th:nth-child(1),
+#users-table td:nth-child(1) {
+    width: 25%; /* Example width for the first column */
 }
 
-/* Scrollbar Styling */
-.scrollable-table::-webkit-scrollbar {
-    width: 10px;
+#users-table th:nth-child(2),
+#users-table td:nth-child(2) {
+    width: 25%; /* Example width for the second column */
 }
 
-.scrollable-table::-webkit-scrollbar-thumb {
-    background-color: #4CAF50;
-    border-radius: 10px;
+#users-table th:nth-child(3),
+#users-table td:nth-child(3) {
+    width: 25%; /* Example width for the third column (dropdown menu) */
 }
 
-.scrollable-table::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
+#users-table th:nth-child(4),
+#users-table td:nth-child(4) {
+    width: 25%; /* Example width for the Assign Role button */
+}
+
+
+
+/* Role Management Scrollable Table */
+.scrollable-table {
+    max-height: 400px; /* Set a max height to limit the height of the content */
+    overflow-y: auto;  /* Enable vertical scrolling */
+    scroll-behavior: smooth;  /* Smooth scrolling */
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* Table button styles */
@@ -276,17 +285,31 @@ table button:hover {
     box-shadow: 0 0 8px rgba(76, 175, 80, 0.4); /* Glow effect */
 }
 
-/* Scrollbar Styling */
-.scrollable-table::-webkit-scrollbar {
+/* Scrollbar Styling for Role Management Section */
+#role-management::-webkit-scrollbar {
     width: 10px;
 }
 
-.scrollable-table::-webkit-scrollbar-thumb {
+#role-management::-webkit-scrollbar-thumb {
     background-color: #4CAF50;
     border-radius: 10px;
 }
 
-.scrollable-table::-webkit-scrollbar-track {
+#role-management::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar Styling for Users Table */
+#users-table::-webkit-scrollbar {
+    width: 10px;
+}
+
+#users-table::-webkit-scrollbar-thumb {
+    background-color: #4CAF50;
+    border-radius: 10px;
+}
+
+#users-table::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.1);
 }
 
@@ -378,4 +401,33 @@ table button:hover {
 .save-btn:hover {
     background-color: #66BB6A;
     box-shadow: 0 8px 20px rgba(76, 175, 80, 0.6);
+}
+
+/* Styling the select dropdown (Role selection) */
+.input-group select {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background for the dropdown */
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 30px;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.5 3.5L8 10l6.5-6.5L14 2.5 8 8.5l-6-6-1 1z"/></svg>'); /* Down arrow */
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group select option {
+    color: #000; /* Make options black for visibility in the dropdown */
+}
+
+.input-group select:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px 2px rgba(76, 175, 80, 0.5); /* Neon green glow on focus */
 }

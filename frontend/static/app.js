@@ -206,13 +206,22 @@ function loadUsers() {
 
                 // New role dropdown cell
                 const roleSelectCell = document.createElement('td');
+                const roleSelectWrapper = document.createElement('div'); // Create a div for input-group
+                roleSelectWrapper.classList.add('input-group'); // Add the input-group class
                 const roleSelect = document.createElement('select');
                 roleSelect.innerHTML = `
                     <option value="student" ${user[1] === 'student' ? 'selected' : ''}>Student</option>
                     <option value="teacher" ${user[1] === 'teacher' ? 'selected' : ''}>Teacher</option>
                     <option value="admin" ${user[1] === 'admin' ? 'selected' : ''}>Admin</option>
                 `;
-                roleSelectCell.appendChild(roleSelect);
+                
+                // Disable the dropdown if the username is 'admin'
+                if (user[0] === 'admin') {
+                    roleSelect.disabled = true; // Disable dropdown for admin
+                }
+
+                roleSelectWrapper.appendChild(roleSelect); // Append select to the wrapper
+                roleSelectCell.appendChild(roleSelectWrapper); // Append wrapper to the cell
                 row.appendChild(roleSelectCell);
 
                 // Assign role button
@@ -220,9 +229,16 @@ function loadUsers() {
                 const assignButton = document.createElement('button');
                 assignButton.textContent = 'Assign Role';
                 assignButton.classList.add('assign-role-btn');
+
+                // Disable the assign button if the username is 'admin'
+                if (user[0] === 'admin') {
+                    assignButton.disabled = true; // Disable button for admin
+                }
+
                 assignButton.addEventListener('click', function () {
                     assignRole(user[0], roleSelect.value);  // Pass username and selected role
                 });
+
                 assignButtonCell.appendChild(assignButton);
                 row.appendChild(assignButtonCell);
 
@@ -234,6 +250,7 @@ function loadUsers() {
 
     xhr.send();
 }
+
 
 // Function to assign a role to a user
 function assignRole(username, newRole) {
