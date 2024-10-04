@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard/dash_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard/student_style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -14,8 +17,10 @@
                 <h2>Student Dashboard</h2>
             </div>
             <ul class="sidebar-menu">
-                <li><a href="#" onclick="showSection('profile')">Profile</a></li>
-                <li><a href="#" onclick="showSection('attendance')">Attendance</a></li>
+                <li><a href="#" onclick="showSection('profile')"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#" onclick="showSection('attendance-request')"><i class="fas fa-calendar-plus"></i> Attendance Request</a></li>
+                <li><a href="#" onclick="showSection('attendance-report')"><i class="fas fa-chart-bar"></i> Attendance Report</a></li>
+                <li><a href="/logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li> <!-- Logout button -->
             </ul>
         </nav>
 
@@ -24,27 +29,188 @@
             <!-- Profile Section -->
             <section id="profile" class="content-section">
                 <h2>Profile</h2>
-                <p>Name: Student Name</p>
-                <p>Username: studentuser</p>
+                <div class="profile-card">
+                    <div class="profile-img">
+                        <img src="/images/none_profile.png" alt="Profile Picture" />
+                    </div>
+                    <div class="profile-info">
+                        <h3>{{ profile[0] }}</h3> <!-- Username -->
+                        <p>Email: {{ profile[1] }}</p> <!-- Email -->
+                        <p>Student ID: {{ profile[2] }}</p> <!-- Student ID -->
+                        <p>Program: {{ profile[3] }}</p> <!-- Program -->
+                        <p>Registration No: {{ profile[4] }}</p> <!-- Registration Number -->
+                    </div>
+                </div>
+
+                <!-- Editable Profile Form -->
+                <form id="edit-profile-form" class="profile-form" method="POST" action="/update_profile">
+                    <div class="input-group">
+                        <label for="name">Username:</label>
+                        <input type="text" id="name" name="name" value="{{ profile[0] }}" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" value="{{ profile[1] }}" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="program">Program:</label>
+                        <input type="text" id="program" name="program" value="{{ profile[3] }}" readonly>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="registration_no">Registration No:</label>
+                        <input type="text" id="registration_no" name="registration_no" value="{{ profile[4] }}" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">New Password:</label>
+                        <input type="password" id="password" name="password" placeholder="Enter new password">
+                    </div>
+
+                    <div class="input-group">
+                        <button type="submit" class="save-btn">Save Changes</button>
+                    </div>
+                </form>
             </section>
 
-            <!-- Attendance Section -->
-            <section id="attendance" class="content-section" style="display: none;">
-                <h2>Attendance</h2>
-                <p>Attendance Percentage: 85%</p>
-                <form id="attendance-form">
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" name="date">
-                    
-                    <label for="description">Description:</label>
-                    <textarea id="description" name="description" rows="4"></textarea>
-
-                    <button type="submit">Submit Request</button>
+            <!-- Attendance Request Section -->
+            <section id="attendance-request" class="content-section" style="display: none;">
+                <h2>Attendance Request</h2>
+                <form id="attendance-request-form" class="attendance-form" method="POST" action="/submit_attendance_request">
+                    <div class="input-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="input-group" id="description-field">
+                        <label for="description">Description (Optional)</label>
+                        <textarea id="description" name="description" placeholder="Provide additional information (optional)"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <button type="submit" class="request-btn">Submit Request</button>
+                    </div>
                 </form>
+            </section>
+
+            <!-- Attendance Report Section -->
+            <section id="attendance-report" class="content-section" style="display: none;">
+                <h2>Attendance Report</h2>
+                <div class="report-table-container">
+                    <table class="attendance-table" id="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendance-table-body">
+                            <!-- Attendance data will be inserted here dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pie chart for attendance summary -->
+                <div class="chart-container">
+                    <canvas id="attendancePieChart"></canvas>
+                </div>
             </section>
         </div>
     </div>
 
-    <script src="/static/app.js"></script>
+    <script>
+        // JavaScript function to toggle between sections
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        // Fetch and display the attendance report and pie chart
+        function loadAttendanceReport() {
+            fetch('/attendance_report')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Attendance data:', data);  // Debugging: Check the returned data
+                    const tableBody = document.getElementById('attendance-table-body');
+                    tableBody.innerHTML = '';  // Clear the table first
+
+                    let presentCount = 0;
+                    let absentCount = 0;
+                    let pendingCount = 0;
+                    let totalCount = data.length;
+                    
+                    // Populate the table and count present, absent, and pending statuses
+                    data.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `                            
+                            <td>${row[0]}</td> <!-- Date -->
+                            <td>${row[1]}</td> <!-- Status: present, absent, pending -->
+                            <td>${row[2]}</td> <!-- Description -->
+                        `;
+                        tableBody.appendChild(tr);
+
+                        // Count the different statuses
+                        const status = row[1].toLowerCase();
+                        if (status === 'present') {
+                            presentCount++;
+                        } else if (status === 'absent') {
+                            absentCount++;
+                        } else if (status === 'pending') {
+                            pendingCount++;
+                        }
+                    });
+
+                    // Generate the pie chart
+                    generateAttendancePieChart(presentCount, absentCount, pendingCount, totalCount);
+                })
+                .catch(error => console.error('Error fetching attendance data:', error));
+        }
+
+        // Generate pie chart using Chart.js and display percentages without showing 0%
+        function generateAttendancePieChart(presentCount, absentCount, pendingCount, totalCount) {
+            const ctx = document.getElementById('attendancePieChart').getContext('2d');
+
+            const data = {
+                labels: ['Present', 'Absent', 'Pending'],
+                datasets: [{
+                    data: [presentCount, absentCount, pendingCount],
+                    backgroundColor: ['#4CAF50', '#FF6384', '#FFCE56'],  // Green for Present, Red for Absent, Yellow for Pending
+                }]
+            };
+
+            const options = {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    datalabels: {
+                        formatter: (value, context) => {
+                            if (value === 0) {
+                                return null;  // Don't display label for 0% values
+                            }
+                            const percentage = ((value / totalCount) * 100).toFixed(2);
+                            return `${percentage}%`;  // Show percentage for non-zero values
+                        },
+                        color: '#fff',
+                        font: {
+                            weight: 'bold'
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: options,
+                plugins: [ChartDataLabels]  // Enable the data labels plugin
+            });
+        }
+
+        // Load attendance report when the report section is displayed
+        document.querySelector('a[onclick="showSection(\'attendance-report\')"]').addEventListener('click', loadAttendanceReport);
+    </script>
 </body>
 </html>

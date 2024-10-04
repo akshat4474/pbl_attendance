@@ -1,0 +1,382 @@
+/* General styles for the body */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #141e30, #243b55); /* Similar modern gradient background */
+    margin: 0;
+    padding: 0;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Style for the main dashboard container */
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Sidebar styles */
+.sidebar {
+    background: rgba(255, 255, 255, 0.1); /* Glassmorphism effect */
+    backdrop-filter: blur(10px); /* Background blur */
+    width: 250px;
+    min-width: 250px; /* Prevents shrinking */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centered items */
+    border-radius: 15px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.2); /* Neon glow */
+    transition: all 0.3s ease; /* Smooth transition */
+    flex-shrink: 0;
+}
+
+/* Sidebar header */
+.sidebar-header {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #fff;
+    letter-spacing: 2px;
+    text-transform: uppercase; /* Uppercase for modern look */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Subtle bottom border */
+    padding-bottom: 10px;
+}
+
+/* Sidebar menu styles */
+.sidebar-menu {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+.sidebar-menu li {
+    margin: 15px 0;
+    width: 100%;
+}
+
+.sidebar-menu li a {
+    color: #b8c6db; /* Light futuristic text color */
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 12px 20px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.05); /* Slight background on menu items */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    position: relative;
+}
+
+.sidebar-menu li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5); /* Neon green hover glow */
+    transform: translateX(10px); /* Slide effect on hover */
+}
+
+.sidebar-menu li a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 6px;
+    width: 6px;
+    background-color: #4CAF50; /* Green dot */
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.sidebar-menu li a:hover::before {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.5); /* Green dot grows on hover */
+}
+
+/* Active Link Highlight */
+.sidebar-menu li a.active {
+    background-color: rgba(76, 175, 80, 0.2); /* Slight highlight for active link */
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+    color: #4CAF50;
+}
+
+/* Ensure the main content takes the rest of the available space */
+.main-content {
+    flex-grow: 1;
+    padding: 40px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);
+}
+
+/* Content section */
+.content-section {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent for glass effect */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.2); /* Neon glow */
+    margin-bottom: 20px;
+}
+
+/* Heading styles */
+h2 {
+    color: #fff;
+    font-size: 28px;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Form input styles */
+form input, form select, form textarea {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    color: #fff;
+    font-size: 16px;
+    margin-bottom: 20px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input:focus, form select:focus, form textarea:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px 2px rgba(76, 175, 80, 0.5); /* Neon green glow on focus */
+}
+
+/* Button styles */
+button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #4CAF50, #8BC34A); /* Neon gradient button */
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 8px 15px rgba(76, 175, 80, 0.4); /* Button glow */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    background-color: #66BB6A; /* Lighter green on hover */
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.6); /* Stronger glow */
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Ensures no space between borders */
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+table, th, td {
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Transparent border for glass effect */
+}
+
+th, td {
+    padding: 8px;
+    color: #fff;
+    text-align: left;
+    font-size: 16px; /* Increase font size slightly to improve readability */
+    line-height: 1.5;
+    vertical-align: middle; /* Ensure vertical centering */
+}
+
+th {
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent for glass effect */
+    padding-top: 0;
+    padding-bottom: 0;
+    color: #fff;
+}
+
+td {
+    background-color: rgba(255, 255, 255, 0.05); /* Light glassmorphism background */
+}
+
+/* Profile Card Styles */
+.profile-card {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.2);
+    margin-bottom: 30px;
+}
+
+.profile-img {
+    margin-right: 20px;
+}
+
+.profile-img img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.4); /* Neon glow effect */
+}
+
+.profile-info {
+    color: #fff;
+}
+
+.profile-info h3 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+.profile-info p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+/* Scrollbar Styling for Table Sections */
+table::-webkit-scrollbar {
+    width: 10px;
+}
+
+table::-webkit-scrollbar-thumb {
+    background-color: #4CAF50;
+    border-radius: 10px;
+}
+
+table::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollable Table Fix for Sticky Header */
+#attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Fixed table layout */
+    margin: 0;
+}
+
+#attendance-table thead {
+    position: sticky;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.1); /* Maintain glass effect for the header */
+    z-index: 1;
+}
+
+#attendance-table tbody {
+    display: block;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#attendance-table thead, #attendance-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Apply fixed layout for rows */
+}
+
+#attendance-table th, #attendance-table td {
+    padding: 8px;
+    text-align: left;
+    color: #fff;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    white-space: nowrap;
+    overflow: hidden; /* Hide overflowed content */
+    text-overflow: ellipsis; /* Ellipsis for overflowed content */
+}
+
+
+/* Profile Form Styles */
+.profile-form {
+    margin-top: 30px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    color: #b8c6db;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px 2px rgba(76, 175, 80, 0.5);
+}
+
+.save-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #4CAF50, #8BC34A);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 8px 15px rgba(76, 175, 80, 0.4);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.save-btn:hover {
+    background-color: #66BB6A;
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.6);
+}
+
+/* Full width for the container */
+.report-table-container {
+    width: 100%; /* Ensure the container takes up full width */
+    overflow-x: auto; /* Allow horizontal scrolling if necessary */
+}
+
+.attendance-table {
+    width: 100%; /* Ensure the table takes up full width */
+    border-collapse: collapse; /* No space between borders */
+    table-layout: auto; /* Auto-layout for dynamic column sizes */
+}
+
+/* Table headers and cells */
+.attendance-table th, .attendance-table td {
+    padding: 12px; /* Increase padding for better visibility */
+    text-align: left; /* Align text to the left */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Semi-transparent borders */
+    color: #fff; /* Text color */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Ensure the table headers have a background color */
+.attendance-table th {
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+}
+
+.attendance-table td {
+    background-color: rgba(255, 255, 255, 0.05); /* Light glassmorphism effect */
+}
+
+.chart-container {
+    margin-top: 30px;
+    width: 100%;
+    max-width: 400px;  /* Set a max width for the pie chart */
+    margin-left: auto;
+    margin-right: auto; /* Center the chart */
+}

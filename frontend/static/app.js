@@ -7,9 +7,9 @@ const messageElement = document.getElementById('message');
 const togglePassword = document.getElementById('toggle-password');
 const registerUsernameInput = document.getElementById('register-username');
 const registerTogglePassword = document.getElementById('register-toggle-password');
+const registerPasswordInput = document.getElementById('register-password');
 const loginTogglePassword = document.getElementById('login-toggle-password');
 const loginPasswordInput = document.getElementById('password');
-const registerPasswordInput = document.getElementById('register-password');
 
 // Get the role field from the form
 const registerRoleInput = document.getElementById('role');
@@ -129,12 +129,15 @@ function togglePasswordVisibility(toggleButton, passwordInput) {
     });
 }
 
-if (loginTogglePassword && loginPasswordInput) {
-    togglePasswordVisibility(loginTogglePassword, loginPasswordInput);
-}
 
 if (registerTogglePassword && registerPasswordInput) {
     togglePasswordVisibility(registerTogglePassword, registerPasswordInput);
+}
+
+
+// If the login toggle password and password input exist, apply the toggle functionality
+if (loginTogglePassword && loginPasswordInput) {
+    togglePasswordVisibility(loginTogglePassword, loginPasswordInput);
 }
 
 // Function to show the selected section and hide others
